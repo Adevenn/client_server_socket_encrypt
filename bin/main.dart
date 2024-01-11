@@ -10,12 +10,7 @@ const String version = '0.0.1';
 ///
 /// - encrypt
 void main(List<String> arguments) {
-  var encryption = Encryption();
-  print('${DateTime.now()} : generating keys');
-  encryption.generateKeyPair();
-  print('${DateTime.now()} : keys generation done');
-  print(encryption.pemPublicKey());
-  print(encryption.pemPrivateKey());
+  var encryption = Encryption.demo();
   /*var server = ServerIO();
   server.start();
   var client = ClientIO();

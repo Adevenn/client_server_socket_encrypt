@@ -8,7 +8,20 @@ import 'package:pointycastle/export.dart';
 class Encryption {
   late RSAPrivateKey privateKey;
   late RSAPublicKey publicKey;
-  SecureRandom getSecureRandom() {
+
+  Encryption() {
+    _generateKeyPair();
+  }
+
+  Encryption.demo() {
+    print('${DateTime.now()} : generating keys');
+    _generateKeyPair();
+    print('${DateTime.now()} : keys generation done');
+    print(pemPublicKey());
+    print(pemPrivateKey());
+  }
+
+  SecureRandom _secureRandom() {
     var secureRandom = FortunaRandom();
     var random = Random.secure();
     List<int> seeds = [];
@@ -19,9 +32,9 @@ class Encryption {
     return secureRandom;
   }
 
-  void generateKeyPair() {
+  void _generateKeyPair() {
     var rsaPars = RSAKeyGeneratorParameters(BigInt.from(65537), 2048, 5);
-    var params = ParametersWithRandom(rsaPars, getSecureRandom());
+    var params = ParametersWithRandom(rsaPars, _secureRandom());
     var keyGenerator = RSAKeyGenerator();
     keyGenerator.init(params);
     AsymmetricKeyPair keyPair = keyGenerator.generateKeyPair();
@@ -50,9 +63,7 @@ class Encryption {
     pem.add(ASN1Integer(
         privateKey.privateExponent! % (privateKey.q! - BigInt.from(1))));
     pem.add(ASN1Integer(privateKey.q!.modInverse(privateKey.p!)));
-
     var dataBase64 = base64.encode(pem.encodedBytes);
-
     return """-----BEGIN PRIVATE KEY-----\r\n$dataBase64\r\n-----END PRIVATE KEY-----""";
   }
 }

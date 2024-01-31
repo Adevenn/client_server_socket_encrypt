@@ -15,6 +15,13 @@ class RSAEncryption {
     _generateKeyPair();
   }
 
+  RSAEncryption.fromClient(String pemPublic) {
+    final keyParser = e.RSAKeyParser();
+    final RSAAsymmetricKey rsaPublicKey = keyParser.parse(pemPublic);
+    publicKey = RSAPublicKey(rsaPublicKey.modulus!, rsaPublicKey.exponent!);
+    encrypter = e.Encrypter(e.RSA(publicKey: publicKey));
+  }
+
   RSAEncryption.demo() {
     print('${DateTime.now()} : generating keys');
     _generateKeyPair();
@@ -65,10 +72,24 @@ class RSAEncryption {
   }
 
   String pemPublicKey() {
-    final pem = ASN1Sequence()
+    var algorithmAsn1Obj = ASN1Object.fromBytes(Uint8List.fromList(
+        [0x6, 0x9, 0x2a, 0x86, 0x48, 0x86, 0xf7, 0xd, 0x1, 0x1, 0x1]));
+    var paramsAsn1Obj = ASN1Object.fromBytes(Uint8List.fromList([0x5, 0x0]));
+    var algorithmSeq = ASN1Sequence()
+      ..add(algorithmAsn1Obj)
+      ..add(paramsAsn1Obj);
+
+    var publicKeySeq = ASN1Sequence()
       ..add(ASN1Integer(publicKey.modulus!))
       ..add(ASN1Integer(publicKey.exponent!));
-    final dataBase64 = base64.encode(pem.encodedBytes);
+    var publicKeySeqBitString =
+        ASN1BitString(Uint8List.fromList(publicKeySeq.encodedBytes));
+
+    var topLevelSeq = ASN1Sequence()
+      ..add(algorithmSeq)
+      ..add(publicKeySeqBitString);
+    var dataBase64 = base64.encode(topLevelSeq.encodedBytes);
+
     return """-----BEGIN PUBLIC KEY-----\r\n$dataBase64\r\n-----END PUBLIC KEY-----""";
   }
 

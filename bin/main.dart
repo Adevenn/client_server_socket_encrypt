@@ -1,5 +1,5 @@
-import 'rsa_encryption.dart';
-import 'salsa_20_encryption.dart';
+import 'client.dart';
+import 'server.dart';
 
 const String version = '0.0.1';
 
@@ -11,15 +11,17 @@ const String version = '0.0.1';
 ///
 /// - encrypt (for RSA and Salsa20)
 void main(List<String> arguments) {
-  final rsa = RSAEncryption();
+  /*final rsa = RSAEncryption();
   final salsa20 = Salsa20Encryption();
   print(salsa20.key.base64);
   final publicKeyEncrypted = rsa.encrypt(salsa20.key.base64);
   print(publicKeyEncrypted);
   final publicKeyDecrypted = rsa.decrypt(publicKeyEncrypted);
-  print(publicKeyDecrypted);
-  /*final server = ServerIO();
+  print(publicKeyDecrypted);*/
+  final server = ServerIO();
   server.start();
   final client = ClientIO();
-  client.connect();*/
+  client.connect();
+  /*final client2 = ClientIO();
+  client2.connect();*/
 }

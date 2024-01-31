@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'rsa_encryption.dart';
+import 'salsa_20_encryption.dart';
+
 class ServerIO {
   static const port = 8523;
+  final salsa20 = Salsa20Encryption();
 
   void start() async {
     final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
@@ -10,10 +14,18 @@ class ServerIO {
     });
   }
 
-  void handleConnection(Socket client) {
-    print(
-        'Connection from ${client.remoteAddress.address}:${client.remotePort}');
-    client.write('Hello world');
-    client.close();
+  void handleConnection(Socket s) {
+    print('Connection from ${s.remoteAddress.address}:${s.remotePort}');
+    RSAEncryption rsa;
+    s.listen((event) {
+      var response = String.fromCharCodes(event);
+      print('Server public key : $response');
+      rsa = RSAEncryption.fromClient(response);
+      print('Server salsaKey : ${salsa20.key.base64}');
+      s.write(rsa.encrypt(salsa20.key.base64));
+    });
+    while (true) {
+      s.listen((event) {});
+    }
   }
 }

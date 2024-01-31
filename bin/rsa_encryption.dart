@@ -6,26 +6,35 @@ import 'package:asn1lib/asn1lib.dart';
 import 'package:encrypt/encrypt.dart' as e;
 import 'package:pointycastle/export.dart';
 
-class Encryption {
+class RSAEncryption {
   late RSAPrivateKey privateKey;
   late RSAPublicKey publicKey;
   late e.Encrypter encrypter;
 
-  Encryption() {
+  RSAEncryption() {
     _generateKeyPair();
   }
 
-  Encryption.demo() {
+  RSAEncryption.demo() {
     print('${DateTime.now()} : generating keys');
     _generateKeyPair();
     print('${DateTime.now()} : keys generation done');
     print(pemPublicKey());
     print(pemPrivateKey());
+
+    ///File size is limited with RSA
+    ///(Not really in fact, but RSA is very slow.
+    ///=> Limited to small files for speed)
     final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+    print('Plain text : $plainText}');
+    print('${DateTime.now()} : encrypting text ...');
     final encrypted = encrypt(plainText);
+    print('${DateTime.now()} : encryption done.');
+    print('Encrypted : $encrypted');
+    print('${DateTime.now()} : decrypting text ...');
     final decrypted = decrypt(encrypted);
-    print(
-        'Plain text : $plainText\nEncrypted : $encrypted\nDecrypted : $decrypted');
+    print('${DateTime.now()} : decryption done.');
+    print('Decrypted : $decrypted');
   }
 
   SecureRandom _secureRandom() {

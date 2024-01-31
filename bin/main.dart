@@ -10,9 +10,10 @@ const String version = '0.0.1';
 ///
 /// - encrypt
 void main(List<String> arguments) {
-  var encryption = Encryption.demo();
-  /*var server = ServerIO();
+  final encryption = Encryption.demo();
+
+  /*final server = ServerIO();
   server.start();
-  var client = ClientIO();
+  final client = ClientIO();
   client.connect();*/
 }

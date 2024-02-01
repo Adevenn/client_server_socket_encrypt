@@ -9,7 +9,7 @@ class ServerIO {
 
   void start() async {
     final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
-    server.listen((Socket client) {
+    server.listen(cancelOnError: true, (Socket client) {
       handleConnection(client);
     });
   }
@@ -24,8 +24,5 @@ class ServerIO {
       print('Server salsaKey : ${salsa20.key.base64}');
       s.write(rsa.encrypt(salsa20.key.base64));
     });
-    while (true) {
-      s.listen((event) {});
-    }
   }
 }

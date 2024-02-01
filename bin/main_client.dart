@@ -1,4 +1,4 @@
-import 'server.dart';
+import 'client.dart';
 
 const String version = '0.0.1';
 
@@ -10,6 +10,8 @@ const String version = '0.0.1';
 ///
 /// - encrypt (for RSA and Salsa20)
 void main(List<String> arguments) {
-  final server = ServerIO();
-  server.start();
+  final client = ClientIO();
+  client.connect();
+  final client2 = ClientIO();
+  client2.connect();
 }

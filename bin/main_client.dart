@@ -1,6 +1,6 @@
 import 'client.dart';
 
-const String version = '0.0.1';
+const String version = '0.0.2';
 
 ///This project works with 3 packages :
 ///
@@ -9,9 +9,11 @@ const String version = '0.0.1';
 /// - asn1lib (to format RSA keys in pem format)
 ///
 /// - encrypt (for RSA and Salsa20)
-void main(List<String> arguments) {
+void main(List<String> arguments) async {
   final client = ClientIO();
-  client.connect();
   final client2 = ClientIO();
-  client2.connect();
+  await client.getSalsaKey();
+  await client2.getSalsaKey();
+  client.start();
+  client2.start();
 }

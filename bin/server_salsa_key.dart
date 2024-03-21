@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'Encryption/rsa_encryption.dart';
@@ -16,10 +17,10 @@ class ServerSalsaKey {
       RSAEncryption rsa;
       s.listen((event) {
         var response = String.fromCharCodes(event);
-        print('Server public key : $response');
         rsa = RSAEncryption.fromClient(response);
-        print('Server salsaKey : ${salsa20.key.base64}');
-        s.write(rsa.encrypt(salsa20.key.base64));
+        s.write(rsa.encrypt(
+            jsonEncode({'key': salsa20.key.base64, 'iv': salsa20.iv.base64})));
+        print('Server salsaKey : ${salsa20.key.base64} & iv : ${salsa20.iv.base64}');
       });
     });
   }

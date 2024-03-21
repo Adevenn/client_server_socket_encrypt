@@ -20,7 +20,7 @@ class ClientIO {
     });
   }
 
-  Future<void> sendData() async{
+  Future<void> sendRequest(String request, Object data) async{
     final s = await Socket.connect("localhost", 8522);
     s.write(salsa20.encrypt('Hi server'));
     s.listen((event) {
@@ -31,7 +31,7 @@ class ClientIO {
   }
 
   void start() async {
-    sendData();
+    sendRequest('hi', '');
     final server = await ServerSocket.bind(InternetAddress.anyIPv4, playerPort);
     server.listen(cancelOnError: true, (Socket client) {
       handleConnection(client);

@@ -4,7 +4,7 @@ class Salsa20Encryption {
   late final Key key;
   late final IV iv;
   late final Encrypter _encrypter;
-<
+
   Salsa20Encryption([String? k, String? i]) {
     key = k == null ? Key.fromLength(32) : Key.fromBase64(k);
     iv = i == null ? IV.fromLength(8) : IV.fromBase64(i);

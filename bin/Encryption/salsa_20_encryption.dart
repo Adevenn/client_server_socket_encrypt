@@ -1,18 +1,21 @@
 import 'package:encrypt/encrypt.dart';
 
 class Salsa20Encryption {
-  late final Key key;
-  late final IV iv;
+  late final Key _key;
+  Key get key => _key;
+  late final IV _iv;
+  IV get iv => _iv;
   late final Encrypter _encrypter;
 
   Salsa20Encryption([String? k, String? i]) {
-    key = k == null ? Key.fromLength(32) : Key.fromBase64(k);
-    iv = i == null ? IV.fromLength(8) : IV.fromBase64(i);
+    _key = k == null ? Key.fromLength(32) : Key.fromBase64(k);
+    _iv = i == null ? IV.fromLength(8) : IV.fromBase64(i);
     _encrypter = Encrypter(Salsa20(key));
   }
 
-  Salsa20Encryption.demo([String? k]) {
-    key = k == null ? Key.fromLength(32) : Key.fromBase64(k);
+  Salsa20Encryption.demo([String? k, String? i]) {
+    _key = k == null ? Key.fromLength(32) : Key.fromBase64(k);
+    _iv = i == null ? IV.fromLength(8) : IV.fromBase64(i);
     _encrypter = Encrypter(Salsa20(key));
     print('Salsa key : ${key.base64}, Salsa IV : ${iv.base64}');
   }

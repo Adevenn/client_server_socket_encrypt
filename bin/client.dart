@@ -16,7 +16,6 @@ class ClientIO {
     s.listen((event) {
       final json = jsonDecode(rsa.decrypt(String.fromCharCodes(event)));
       salsa20 = Salsa20Encryption(json['key'], json['iv']);
-      print('Client salsaKey : ${json['key']}, IV : ${json['iv']}');
       start();
     });
   }

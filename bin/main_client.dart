@@ -12,5 +12,4 @@ const String version = '0.0.2';
 void main(List<String> arguments) async {
   final client = ClientIO();
   await client.getSalsaKey();
-  //client.start();
 }

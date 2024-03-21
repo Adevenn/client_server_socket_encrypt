@@ -20,7 +20,7 @@ class ServerSalsaKey {
         rsa = RSAEncryption.fromClient(response);
         s.write(rsa.encrypt(
             jsonEncode({'key': salsa20.key.base64, 'iv': salsa20.iv.base64})));
-        print('Server salsaKey : ${salsa20.key.base64} & iv : ${salsa20.iv.base64}');
+        print('Server salsaKey : ${salsa20.key.base64}, iv : ${salsa20.iv.base64}');
       });
     });
   }

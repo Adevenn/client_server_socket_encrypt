@@ -12,18 +12,19 @@ class ServerIO{
   void start() async {
     final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
     server.listen(cancelOnError: true, (Socket s) {
-      try{
-        print('Connection from ${s.remoteAddress.address}:${s.remotePort}');
-        s.listen((event) {
-          var response = String.fromCharCodes(event);
-          s.write(salsa20.encrypt('Hi client, you re registered'));
-          print('Client request : $response');
-          print('Client request decrypted : ${salsa20.decrypt(response)}');
-        });
-      }
-      catch(e){
-        print(e);
-      }
+      print('Connection from ${s.remoteAddress.address}:${s.remotePort}');
+      s.listen((event) {
+        var response = String.fromCharCodes(event);
+        s.write(salsa20.encrypt('Hi client, you re registered'));
+        print('Client request : $response');
+        print('Client request decrypted : ${salsa20.decrypt(response)}');
+      }, onError: (_){
+        print(_);
+        s.close();
+      }, onDone: (){
+        print('Connection done : From ${s.remoteAddress.address}');
+        s.close();
+      });
     });
   }
 

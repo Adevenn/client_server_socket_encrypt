@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="client" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application" singleton="false">
+    <option name="filePath" value="$PROJECT_DIR$/bin/main_client.dart" />
+    <method v="2" />
+  </configuration>
+</component>

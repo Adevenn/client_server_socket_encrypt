@@ -6,7 +6,7 @@ import 'Encryption/salsa_20_encryption.dart';
 
 class ClientIO {
   static const playerPort = 8524;
-  late final Salsa20Encryption salsa20;
+  late final Salsa20Encryption salsa;
 
   Future<void> getSalsaKey() async {
     final rsa = RSAEncryption();
@@ -15,16 +15,16 @@ class ClientIO {
     s.write(rsa.pemPublicKey());
     s.listen((event) {
       final json = jsonDecode(rsa.decrypt(String.fromCharCodes(event)));
-      salsa20 = Salsa20Encryption(json['key'], json['iv']);
+      salsa = Salsa20Encryption(json['key'], json['iv']);
       start();
     });
   }
 
-  Future<void> sendRequest(String request, Object data) async{
+  Future<void> sendRequest(String request, Object data) async {
     final s = await Socket.connect("localhost", 8522);
-    s.write(salsa20.encrypt('Hi server'));
+    s.write(salsa.encrypt('Hi server'));
     s.listen((event) {
-      var response = salsa20.decrypt(String.fromCharCodes(event));
+      var response = salsa.decrypt(String.fromCharCodes(event));
       print('Server response : ${String.fromCharCodes(event)}');
       print('Server response decrypted : $response');
     });
